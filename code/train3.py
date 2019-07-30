@@ -134,7 +134,8 @@ model_res = models.resnet101(pretrained=True, progress=False)
 num_features = model_res.fc.in_features
 model_res.fc = nn.Linear(num_features, 196)
 
-optimizer = optim.Adam(model_res.parameters(), lr=0.00001)
+
+optimizer = optim.Adam(model_res.parameters(), lr=0.0001)
 criterion = nn.CrossEntropyLoss()
 
 def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, device, PATH, epochs=20):
@@ -206,7 +207,9 @@ def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, device,
     return model
 
 model_res.to(device)
-model_res = train_model(model=model_res, dataloaders=dataloaders, dataset_sizes=dataset_sizes, criterion=criterion, optimizer=optimizer, device=device, epochs=20, PATH='model/ten_crop/rough')
+model_res.load_state_dict(torch.load('../model/ten_crop/rough/best_model_5_91.pt'))
+model_res = train_model(model=model_res, dataloaders=dataloaders, dataset_sizes=dataset_sizes, criterion=criterion, optimizer=optimizer, device=device, epochs=10, 
+        PATH='model/ten_crop/tune2')
 
 
 
